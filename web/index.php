@@ -51,10 +51,6 @@ if (isset($config['auth']['token'])) {
 $app['http.client'] = new \GuzzleHttp\Client($guzzleOptions);
 
 $app->get('/', function (Request $request) use ($app) {
-    if (!empty($_GET['id']) && !empty($_GET['redir'])) {
-
-    }
-
     $repos = [];
     $labels = [];
 
