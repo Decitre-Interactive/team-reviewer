@@ -60,6 +60,9 @@
                 </select>
                 <input type="text" class="form-control" name="notApprovedBy" placeholder="Excluded approver" value="<?php echo $notApprovedBy; ?>"/>
                 <label>
+                    <input type="checkbox" name="hideNonUpdated" <?php if ($hideNonUpdated): ?>checked<?php endif; ?>> Hide non updated
+                </label>
+                <label>
                     <input type="checkbox" name="autorefresh" <?php if ($autorefresh): ?>checked<?php endif; ?>> Autorefresh
                 </label>
                 <button type="submit" class="btn btn-default">Filter</button>
@@ -88,6 +91,10 @@
                             $updated = !(!empty($_COOKIE['lastClick'][$pr['id']]) && $_COOKIE['lastClick'][$pr['id']] > strtotime($pr['updated_at']));
 
                             if (!empty($notApprovedBy) && isset($pr['reviews']['approvers'][$notApprovedBy])) {
+                                continue;
+                            }
+
+                            if (!$updated && $hideNonUpdated) {
                                 continue;
                             }
                             ?>

@@ -70,6 +70,7 @@ $app->get('/', function (Request $request) use ($app) {
         'selectedStatus' => $request->query->get('status'),
         'autorefresh' => $request->query->getBoolean('autorefresh'),
         'notApprovedBy' => $request->query->get('notApprovedBy'),
+        'hideNonUpdated' => $request->query->getBoolean('hideNonUpdated'),
     ]);
 });
 
