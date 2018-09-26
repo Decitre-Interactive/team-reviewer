@@ -58,6 +58,7 @@
                     <option value="failure" <?php if ($selectedStatus == 'failure'): ?>selected<?php endif; ?>>Failure</option>
                     <option value="pending" <?php if ($selectedStatus == 'pending'): ?>selected<?php endif; ?>>Pending</option>
                 </select>
+                <input type="text" class="form-control" name="notApprovedBy" placeholder="Excluded approver" value="<?php echo $notApprovedBy; ?>"/>
                 <label>
                     <input type="checkbox" name="autorefresh" <?php if ($autorefresh): ?>checked<?php endif; ?>> Autorefresh
                 </label>
@@ -85,6 +86,10 @@
                                 continue;
                             }
                             $updated = !(!empty($_COOKIE['lastClick'][$pr['id']]) && $_COOKIE['lastClick'][$pr['id']] > strtotime($pr['updated_at']));
+
+                            if (!empty($notApprovedBy) && isset($pr['reviews']['approvers'][$notApprovedBy])) {
+                                continue;
+                            }
                             ?>
                             <a href="/<?php echo $pr['id']; ?>/<?php echo base64_encode($pr['html_url']); ?>" class="list-group-item <?php if ($updated): ?>updated<?php endif; ?> <?php if ($pr['reviews']['state'] == 'APPROVED'): ?>list-group-item-success<?php endif; ?>" target="_blank">
                                 <div class="media">

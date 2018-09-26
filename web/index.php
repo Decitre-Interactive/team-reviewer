@@ -69,6 +69,7 @@ $app->get('/', function (Request $request) use ($app) {
         'selectedLabels' => $request->query->get('label', []),
         'selectedStatus' => $request->query->get('status'),
         'autorefresh' => $request->query->getBoolean('autorefresh'),
+        'notApprovedBy' => $request->query->get('notApprovedBy'),
     ]);
 });
 
@@ -113,6 +114,7 @@ $app->get('/update', function () use ($app, $config) {
             $pr['reviews'] = [
                 'comments' => json_decode($app['http.client']->get('https://api.github.com/repos/'.$repository.'/pulls/'.$pr['number'].'/reviews')->getBody()->getContents(), true),
                 'state' => null,
+                'approvers' => [],
             ];
 
             foreach ($pr['reviews']['comments'] as $review) {
@@ -120,12 +122,23 @@ $app->get('/update', function () use ($app, $config) {
                     $pr['reviews']['state'] = $review['state'];
                 }
 
-                if ('APPROVED' == $review['state'] && 'REQUEST_CHANGES' != $pr['reviews']['state']) {
-                    $pr['reviews']['state'] = $review['state'];
+                if ('APPROVED' === $review['state']) {
+                    $pr['reviews']['approvers'][$review['user']['login']] = $review['user'];
+
+                    if ('REQUEST_CHANGES' !== $pr['reviews']['state']) {
+                        $pr['reviews']['state'] = $review['state'];
+                    }
                 }
 
-                if ('REQUEST_CHANGES' == $review['state']) {
+                if ('REQUEST_CHANGES' === $review['state']) {
                     $pr['reviews']['state'] = $review['state'];
+                }
+            }
+
+            foreach ($pr['comments'] as $comment) {
+                $lowerCaseComment = trim(strtolower($comment['body']));
+                if ($lowerCaseComment === 'ok' || $lowerCaseComment == 'lgtm' || strpos($lowerCaseComment, 'ok') === 0) {
+                    $pr['reviews']['approvers'][$comment['user']['login']] = $comment['user'];
                 }
             }
 
