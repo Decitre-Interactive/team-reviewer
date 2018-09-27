@@ -59,6 +59,7 @@
                     <option value="pending" <?php if ($selectedStatus == 'pending'): ?>selected<?php endif; ?>>Pending</option>
                 </select>
                 <input type="text" class="form-control" name="notApprovedBy" placeholder="Excluded approver" value="<?php echo $notApprovedBy; ?>"/>
+                <input type="text" class="form-control" name="notAuthoredBy" placeholder="Excluded author" value="<?php echo $notAuthoredBy; ?>"/>
                 <label>
                     <input type="checkbox" name="hideNonUpdated" <?php if ($hideNonUpdated): ?>checked<?php endif; ?>> Hide non updated
                 </label>
@@ -95,6 +96,10 @@
                             }
 
                             if (!$updated && $hideNonUpdated) {
+                                continue;
+                            }
+
+                            if (!empty($notAuthoredBy) && $pr['user']['login'] === $notAuthoredBy) {
                                 continue;
                             }
                             ?>

@@ -71,6 +71,7 @@ $app->get('/', function (Request $request) use ($app) {
         'autorefresh' => $request->query->getBoolean('autorefresh'),
         'notApprovedBy' => $request->query->get('notApprovedBy'),
         'hideNonUpdated' => $request->query->getBoolean('hideNonUpdated'),
+        'notAuthoredBy' => $request->query->get('notAuthoredBy'),
     ]);
 });
 
