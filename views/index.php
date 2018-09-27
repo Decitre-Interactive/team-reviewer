@@ -118,7 +118,7 @@
                                             </small>
                                         </h4>
                                         <span class="text-muted">
-                                            #<?php echo $pr['number'] ?> <i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo date('d/m H:i', strtotime($pr['created_at'])); ?> <i class="fa fa-comment-o" aria-hidden="true"></i> <?php echo isset($pr['comments']) ? count($pr['comments']) : '0' ?>
+                                            #<?php echo $pr['number'] ?> <i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo date('d/m/Y H:i', strtotime($pr['created_at'])); ?> <i class="fa fa-comment-o" aria-hidden="true"></i> <?php echo isset($pr['comments']) ? count($pr['comments']) : '0' ?>
                                         </span>
                                     </div>
                                 </div>
